@@ -1,6 +1,7 @@
 # delete.md
 
 # Delete the book
+from bookshelf.models import Book
 retrieved_book.delete()
 
 # Confirm deletion
