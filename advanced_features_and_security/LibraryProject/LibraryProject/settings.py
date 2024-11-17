@@ -42,10 +42,21 @@ SESSION_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True
 
 # Set HTTP Strict Transport Security (HSTS) for 1 year   UPDATED:
-SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_SECONDS = 31536000  # 1 year in seconds
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS policy to all subdomains
+SECURE_HSTS_PRELOAD = True  # Allow browsers to preload HSTS policy
 
 # Prevent CSRF cookie from being accessed via JavaScript   UPDATED:
 CSRF_COOKIE_HTTPONLY = True
+
+# Prevent framing of the site (clickjacking protection)   UPDATED:
+X_FRAME_OPTIONS = 'DENY'
+
+# Prevent browsers from MIME-sniffing a response away from the declared content-type   UPDATED:
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Enable the browser's built-in XSS filter   UPDATED:
+SECURE_BROWSER_XSS_FILTER = True
 
 ALLOWED_HOSTS = []
 
