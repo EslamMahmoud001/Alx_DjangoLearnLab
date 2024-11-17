@@ -19,6 +19,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
+############# SECURITY ######################
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-zxx%@6z0g^-u)c0vj4_z%=n_14=kr4+b$ob00$2y5v_z99vxg)'
 
@@ -57,6 +59,11 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Enable the browser's built-in XSS filter   UPDATED:
 SECURE_BROWSER_XSS_FILTER = True
+
+# specify how Django should handle HTTPS requests forwarded by a proxy:   UPDATED:
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+#################################################
 
 ALLOWED_HOSTS = []
 
