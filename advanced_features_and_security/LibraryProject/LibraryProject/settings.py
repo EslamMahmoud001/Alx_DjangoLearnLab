@@ -41,7 +41,7 @@ LOGIN_REDIRECT_URL = "/accounts/profile"
 LOGOUT_REDIRECT_URL = "/accounts/profile"
 
 # point to the custom user model    UPDATED:
-AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 #This informs Django about the available authentication methods    UPDATED:
 AUTHENTICATION_BACKENDS = [
