@@ -25,6 +25,28 @@ SECRET_KEY = 'django-insecure-zxx%@6z0g^-u)c0vj4_z%=n_14=kr4+b$ob00$2y5v_z99vxg)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Enable the XSS filter in modern browsers  UPDATED:
+SECURE_BROWSER_XSS_FILTER = True
+
+# Prevent the site from being embedded in an iframe (clickjacking prevention)  UPDATED:
+X_FRAME_OPTIONS = 'DENY'
+
+# Disable sniffing of content types by browsers to reduce risk of drive-by downloads  UPDATED:
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+#Ensure that cookies are only transmitted over secure HTTPS connections by setting the following:   UPDATED:
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Redirect HTTP to HTTPS   UPDATED:
+SECURE_SSL_REDIRECT = True
+
+# Set HTTP Strict Transport Security (HSTS) for 1 year   UPDATED:
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+
+# Prevent CSRF cookie from being accessed via JavaScript   UPDATED:
+CSRF_COOKIE_HTTPONLY = True
+
 ALLOWED_HOSTS = []
 
 #Email Configurations    UPDATED:
@@ -49,6 +71,19 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Default backend
 ]
 
+# Configure CSP in settings.py
+# You can set a strict Content Security Policy to reduce the risk of inline JavaScript execution.      UPDATED:
+
+
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
+CSP_IMG_SRC = ("'self'",)
+CSP_FONT_SRC = ("'self'",)
+CSP_CONNECT_SRC = ("'self'",)
+CSP_FRAME_ANCESTORS = ("'none'",)
+CSP_REPORT_URI = '/csp-violation-report-endpoint/'  # Optional: For reporting CSP violations
+
 
 # Application definition
 
@@ -60,7 +95,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'relationship_app.apps.RelationshipAppConfig',
+    'relationship_app.apps.RelationshipAppConfig', 
 ]
 
 MIDDLEWARE = [
@@ -71,6 +106,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware', #pip install django-csp     UPDATED:
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
