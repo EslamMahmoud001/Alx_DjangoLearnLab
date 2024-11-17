@@ -1,0 +1,40 @@
+{% block content %}
+  <h2>Book List</h2>
+  
+  {% if user.has_perm('bookshelf.can_create') %}
+    <a href="{% url 'create_book' %}" class="btn btn-success">Create New Book</a>
+  {% endif %}
+  
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Publication Year</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in books %}
+        <tr>
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.publication_year }}</td>
+          <td>
+            {% if user.has_perm('bookshelf.can_view') %}
+              <a href="{% url 'view_book' book.id %}" class="btn btn-info">View</a>
+            {% endif %}
+            
+            {% if user.has_perm('bookshelf.can_edit') %}
+              <a href="{% url 'edit_book' book.id %}" class="btn btn-warning">Edit</a>
+            {% endif %}
+            
+            {% if user.has_perm('bookshelf.can_delete') %}
+              <a href="{% url 'delete_book' book.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this book?');">Delete</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
