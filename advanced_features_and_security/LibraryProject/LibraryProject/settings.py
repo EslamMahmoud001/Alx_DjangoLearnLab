@@ -45,7 +45,7 @@ AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 #This informs Django about the available authentication methods    UPDATED:
 AUTHENTICATION_BACKENDS = [
-    'accounts.auth_backends.EmailBackend',  # Adjust the path based on where you saved it
+    'bookshelf.auth_backends.EmailBackend',  # Adjust the path based on where you saved it
     'django.contrib.auth.backends.ModelBackend',  # Default backend
 ]
 
@@ -53,14 +53,13 @@ AUTHENTICATION_BACKENDS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'accounts.apps.AccountsConfig',
+    'bookshelf.apps.BookshelfConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bookshelf.apps.BookshelfConfig',
     'relationship_app.apps.RelationshipAppConfig',
 ]
 
