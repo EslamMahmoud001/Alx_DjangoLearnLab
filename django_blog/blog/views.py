@@ -75,20 +75,20 @@ def profile(request):
         messages.success(request, 'Profile updated successfully!')
     return render(request, 'blog/profile.html', {'user': request.user})
 
-@login_required
-def add_comment(request, post_id):
-    post = Post.objects.get(id=post_id)
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            new_comment = form.save(commit=False)
-            new_comment.author = request.user
-            new_comment.post = post
-            new_comment.save()
-            return redirect('post-detail', pk=post_id)
-    else:
-        form = CommentForm()
-    return render(request, 'blog/add_comment.html', {'form': form, 'post': post})
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/add_comment.html'
+    context_object_name = 'form'
+
+    def form_valid(self, form):
+        post = Post.objects.get(id=self.kwargs['post_id'])
+        form.instance.author = self.request.user
+        form.instance.post = post
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('post-detail', kwargs={'pk': self.kwargs['post_id']})
 
 class CommentUpdateView(LoginRequiredMixin, UpdateView):
     model = Comment
