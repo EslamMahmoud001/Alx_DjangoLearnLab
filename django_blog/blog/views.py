@@ -7,7 +7,9 @@ from .forms import CustomUserCreationForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
-from .models import Post
+from .models import Post, Comment
+from .forms import CommentForm
+
 
 class PostListView(ListView):
     model = Post
@@ -18,6 +20,7 @@ class PostListView(ListView):
 class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
+    context_object_name = 'post'
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -71,3 +74,39 @@ def profile(request):
         user.save()
         messages.success(request, 'Profile updated successfully!')
     return render(request, 'blog/profile.html', {'user': request.user})
+
+@login_required
+def add_comment(request, post_id):
+    post = Post.objects.get(id=post_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.author = request.user
+            new_comment.post = post
+            new_comment.save()
+            return redirect('post-detail', pk=post_id)
+    else:
+        form = CommentForm()
+    return render(request, 'blog/add_comment.html', {'form': form, 'post': post})
+
+class CommentUpdateView(LoginRequiredMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/edit_comment.html'
+
+    def get_queryset(self):
+        # Ensure that users can only edit their own comments
+        return Comment.objects.filter(author=self.request.user)
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+class CommentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Comment
+    template_name = 'blog/delete_comment.html'
+    success_url = reverse_lazy('post-list')
+
+    def get_queryset(self):
+        # Ensure that users can only delete their own comments
+        return Comment.objects.filter(author=self.request.user)
